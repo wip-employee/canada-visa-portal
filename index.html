@@ -1,0 +1,1875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canada Visa Employee Portal | IRCC Information & Biometric Selfie Collection</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        /* Custom scrollbar for clean corporate feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        /* Camera Oval Guide */
+        .selfie-oval-guide {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 210px;
+            height: 270px;
+            border: 3px dashed rgba(255, 255, 255, 0.85);
+            border-radius: 50% / 55%;
+            box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.55);
+            pointer-events: none;
+        }
+        /* Print styles for HR Summary Export */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printModalContent, #printModalContent * {
+                visibility: visible;
+            }
+            #printModalContent {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none !important;
+                border: none !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Top Notification / Toast Banner -->
+    <div id="toastContainer" class="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+
+    <!-- Header Navigation -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap items-center justify-between py-3.5 gap-3">
+                <!-- Brand & Canada Maple Leaf Emblem -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-red-600 flex items-center justify-center text-white shadow-sm shrink-0">
+                        <i class="fa-brands fa-canadian-maple-leaf text-2xl"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h1 class="text-base sm:text-lg font-bold text-slate-900 tracking-tight">Canada Visa Portal</h1>
+                            <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-200">Wipro Private Limited</span>
+                        </div>
+                        <p class="text-xs text-slate-500">Applicant: <span class="font-semibold text-slate-700">Sushant Dada Patil</span> &bull; Corporate Immigration Onboarding</p>
+                    </div>
+                </div>
+
+                <!-- Header Action Controls -->
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <!-- Share Link Button -->
+                    <button type="button" id="shareLinkBtn" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition border border-slate-200">
+                        <i class="fa-solid fa-share-nodes text-red-600"></i>
+                        <span>Share Form Link</span>
+                    </button>
+
+                    <!-- View Switcher Tabs -->
+                    <div class="inline-flex rounded-lg bg-slate-100 p-1 border border-slate-200">
+                        <button type="button" id="tabEmployeeBtn" class="px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-md bg-white text-slate-900 shadow-sm transition">
+                            <i class="fa-solid fa-user-pen mr-1 text-red-600"></i> Employee Form
+                        </button>
+                        <button type="button" id="tabHrBtn" class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md text-slate-600 hover:text-slate-900 transition">
+                            <i class="fa-solid fa-shield-halved mr-1 text-slate-500"></i> HR Dashboard
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+        <!-- ========================================================= -->
+        <!-- VIEW 1: EMPLOYEE VISA APPLICATION FORM                    -->
+        <!-- ========================================================= -->
+        <div id="employeeFormView">
+
+            <!-- Personalized Applicant & Sponsor Banner -->
+            <div class="bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-2xl p-4 sm:p-5 mb-5 shadow-sm flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-11 h-11 rounded-xl bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-400 font-bold text-base shrink-0">
+                        SP
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <h2 class="text-sm sm:text-base font-bold text-white">Welcome, Sushant Dada Patil</h2>
+                            <span class="px-2 py-0.5 rounded-md text-[11px] font-medium bg-white/10 text-slate-200 border border-white/15">Sponsor: Wipro Private Limited</span>
+                        </div>
+                        <p class="text-xs text-slate-300 mt-0.5">Please verify your pre-filled profile, complete all IRCC visa sections, and capture your biometric selfie.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sticky Progress Tracker -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 mb-6 shadow-sm">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-red-600">Application Progress</span>
+                        <h2 id="currentStepLabel" class="text-sm sm:text-base font-bold text-slate-800">Step 1 of 9: Personal Details</h2>
+                    </div>
+                    <span id="progressPercentage" class="text-sm font-bold text-slate-700 bg-slate-100 px-3 py-1 rounded-full">11% Complete</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                    <div id="progressBar" class="bg-red-600 h-2.5 rounded-full transition-all duration-300" style="width: 11%"></div>
+                </div>
+                <!-- Quick Section Jump Pills -->
+                <div class="flex items-center gap-1.5 overflow-x-auto pt-3 pb-1 text-xs" id="stepPillsContainer">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+
+            <!-- Form Container -->
+            <form id="visaApplicationForm" novalidate class="space-y-6">
+
+                <!-- SECTION 1: PERSONAL DETAILS -->
+                <section data-step="1" class="form-step bg-white rounded-2xl border border-slate-200 p-5 sm:p-7 shadow-sm">
+                    <div class="border-b border-slate-100 pb-4 mb-6 flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-red-50 text-red-600 flex items-center justify-center font-bold">1</div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Personal Details</h3>
+                            <p class="text-xs text-slate-500">Enter your details exactly as they appear on your valid passport.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Surname / Family Name <span class="text-red-500">*</span></label>
+                            <input type="text" name="surname" value="PATIL" required placeholder="e.g., PATIL" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Given Name(s) <span class="text-red-500">*</span></label>
+                            <input type="text" name="givenNames" value="SUSHANT DADA" required placeholder="e.g., SUSHANT DADA" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Given Name(s) <span class="text-red-500">*</span></label>
+                            <input type="text" name="givenNames" required placeholder="e.g., ROHAN KUMAR" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Have you ever used any other name (Alias, Maiden Name, Nickname)?</label>
+                            <div class="flex items-center gap-4 mt-1">
+                                <label class="inline-flex items-center gap-2 text-sm cursor-pointer">
+                                    <input type="radio" name="hasOtherName" value="No" checked class="text-red-600 focus:ring-red-500"> No
+                                </label>
+                                <label class="inline-flex items-center gap-2 text-sm cursor-pointer">
+                                    <input type="radio" name="hasOtherName" value="Yes" class="text-red-600 focus:ring-red-500"> Yes
+                                </label>
+                            </div>
+                            <div id="otherNameContainer" class="hidden mt-3">
+                                <input type="text" name="otherNameDetails" placeholder="Enter full previous / alias name" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Gender <span class="text-red-500">*</span></label>
+                            <select name="gender" required class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm bg-white focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Another Gender (X)">Another Gender (X)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Date of Birth <span class="text-red-500">*</span></label>
+                            <input type="date" name="dob" required class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Place of Birth (City / Town) <span class="text-red-500">*</span></label>
+                            <input type="text" name="birthCity" required placeholder="e.g., Pune" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Country of Birth <span class="text-red-500">*</span></label>
+                            <input type="text" name="birthCountry" required placeholder="e.g., India" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Citizenship(s) <span class="text-red-500">*</span></label>
+                            <input type="text" name="citizenship" required placeholder="e.g., Indian" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Current Country of Residence & Status <span class="text-red-500">*</span></label>
+                            <input type="text" name="residenceStatus" required placeholder="e.g., India - Citizen" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Marital Status <span class="text-red-500">*</span></label>
+                            <select name="maritalStatus" id="maritalStatusSelect" required class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm bg-white focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                                <option value="">Select Marital Status</option>
+                                <option value="Single / Never Married">Single / Never Married</option>
+                                <option value="Married">Married</option>
+                                <option value="Common-Law">Common-Law</option>
+                                <option value="Divorced">Divorced</option>
+                                <option value="Separated">Separated</option>
+                                <option value="Widowed">Widowed</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">National ID / Aadhaar / PAN (Optional)</label>
+                            <input type="text" name="nationalId" placeholder="e.g., Aadhaar / PAN Number" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+
+                        <!-- Conditional Spouse / Common-Law Partner Details -->
+                        <div id="spouseDetailsBox" class="hidden sm:col-span-2 bg-slate-50 rounded-xl p-4 border border-slate-200 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div class="sm:col-span-3">
+                                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600">Spouse / Common-Law Partner Information</h4>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Spouse Full Name</label>
+                                <input type="text" name="spouseName" placeholder="Full Name" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Spouse Date of Birth</label>
+                                <input type="date" name="spouseDob" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Date of Marriage / Union</label>
+                                <input type="date" name="marriageDate" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 2: PASSPORT DETAILS -->
+                <section data-step="2" class="form-step hidden bg-white rounded-2xl border border-slate-200 p-5 sm:p-7 shadow-sm">
+                    <div class="border-b border-slate-100 pb-4 mb-6 flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-red-50 text-red-600 flex items-center justify-center font-bold">2</div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Passport Details</h3>
+                            <p class="text-xs text-slate-500">Provide your current valid travel document information and bio-page scan.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Passport Number <span class="text-red-500">*</span></label>
+                            <input type="text" name="passportNumber" required placeholder="e.g., Z1234567" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm uppercase focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Country of Issue <span class="text-red-500">*</span></label>
+                            <input type="text" name="passportCountry" required placeholder="e.g., India" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Passport Issue Date <span class="text-red-500">*</span></label>
+                            <input type="date" name="passportIssueDate" required class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Passport Expiry Date <span class="text-red-500">*</span></label>
+                            <input type="date" name="passportExpiryDate" required class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Passport Bio-Page Upload (Front & Back Photo or PDF)</label>
+                            <div class="mt-1 flex flex-col items-center justify-center border-2 border-dashed border-slate-300 rounded-xl p-5 bg-slate-50 hover:bg-slate-100/70 transition">
+                                <i class="fa-solid fa-passport text-3xl text-slate-400 mb-2"></i>
+                                <p class="text-xs text-slate-600 mb-2 text-center">Upload clear scan/photo of passport bio page (JPG, PNG, or PDF)</p>
+                                <label class="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-50 shadow-sm">
+                                    <i class="fa-solid fa-upload text-red-600"></i> Choose File
+                                    <input type="file" id="passportFileInput" accept="image/*,.pdf" class="hidden">
+                                </label>
+                                <div id="passportPreviewBox" class="hidden mt-3 text-center">
+                                    <span id="passportFileName" class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200"></span>
+                                    <img id="passportImgPreview" class="hidden mt-2 max-h-40 rounded-lg border border-slate-200 mx-auto shadow-sm" alt="Passport preview">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 3: CONTACT & RESIDENTIAL ADDRESS -->
+                <section data-step="3" class="form-step hidden bg-white rounded-2xl border border-slate-200 p-5 sm:p-7 shadow-sm">
+                    <div class="border-b border-slate-100 pb-4 mb-6 flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-red-50 text-red-600 flex items-center justify-center font-bold">3</div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Contact & Residential Address</h3>
+                            <p class="text-xs text-slate-500">Where can IRCC and HR reach you regarding your visa application?</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                        <div class="sm:col-span-2">
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Current Residential Street Address <span class="text-red-500">*</span></label>
+                            <input type="text" name="resStreet" id="resStreet" required placeholder="Flat/House No., Building, Street Name" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">City / Town <span class="text-red-500">*</span></label>
+                            <input type="text" name="resCity" id="resCity" required placeholder="e.g., Pune" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">State / Province <span class="text-red-500">*</span></label>
+                            <input type="text" name="resState" id="resState" required placeholder="e.g., Maharashtra" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Postal / ZIP Code <span class="text-red-500">*</span></label>
+                            <input type="text" name="resPostal" id="resPostal" required placeholder="e.g., 411001" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Country <span class="text-red-500">*</span></label>
+                            <input type="text" name="resCountry" id="resCountry" required placeholder="e.g., India" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+
+                        <div class="sm:col-span-2 pt-2">
+                            <label class="inline-flex items-center gap-2 text-sm font-medium text-slate-700 cursor-pointer">
+                                <input type="checkbox" id="sameAsResidential" checked class="rounded text-red-600 focus:ring-red-500 w-4 h-4">
+                                Mailing address is the same as my current residential address
+                            </label>
+                        </div>
+
+                        <div id="mailingAddressBox" class="hidden sm:col-span-2 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Full Mailing Address</label>
+                            <textarea name="mailingAddress" rows="2" placeholder="Enter complete mailing address with Postal Code and Country" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Personal Email Address <span class="text-red-500">*</span></label>
+                            <input type="email" name="email" required placeholder="employee@example.com" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Primary Mobile Number (with Country Code) <span class="text-red-500">*</span></label>
+                            <input type="tel" name="primaryPhone" required placeholder="+91 98765 43210" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Alternate Phone Number (Optional)</label>
+                            <input type="tel" name="altPhone" placeholder="+91 20 1234 5678" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 4: PURPOSE OF VISIT & CANADA STAY DETAILS -->
+                <section data-step="4" class="form-step hidden bg-white rounded-2xl border border-slate-200 p-5 sm:p-7 shadow-sm">
+                    <div class="border-b border-slate-100 pb-4 mb-6 flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-red-50 text-red-600 flex items-center justify-center font-bold">4</div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Purpose of Visit & Canada Stay Details</h3>
+                            <p class="text-xs text-slate-500">Details of your planned travel, host company in Canada, and funding.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Visa Category / Purpose of Travel <span class="text-red-500">*</span></label>
+                            <select name="visaCategory" required class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm bg-white focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                                <option value="">Select Purpose</option>
+                                <option value="Business Visitor (Meetings / Client Visit)">Business Visitor (Meetings / Client Visit)</option>
+                                <option value="Work Permit / Intra-Company Transfer (ICT)">Work Permit / Intra-Company Transfer (ICT)</option>
+                                <option value="Conference / Corporate Training">Conference / Corporate Training</option>
+                                <option value="Tourism / Temporary Resident Visa (TRV)">Tourism / Temporary Resident Visa (TRV)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Intended Duration of Stay <span class="text-red-500">*</span></label>
+                            <input type="text" name="stayDuration" required placeholder="e.g., 14 Days / 6 Months" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Intended Date of Arrival in Canada <span class="text-red-500">*</span></label>
+                            <input type="date" name="arrivalDate" required class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Intended Date of Departure <span class="text-red-500">*</span></label>
+                            <input type="date" name="departureDate" required class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Host / Inviting Company Name & Canadian Office Address <span class="text-red-500">*</span></label>
+                            <textarea name="hostDetails" required rows="2" placeholder="Company Name, Contact Person, Street Address, City, Province (e.g., Toronto, ON), Postal Code" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Funds Available for Stay (CAD / INR) <span class="text-red-500">*</span></label>
+                            <input type="text" name="fundsAvailable" required placeholder="e.g., CAD 5,000 / INR 3,00,000" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Who is Paying for the Trip? <span class="text-red-500">*</span></label>
+                            <select name="tripFunder" required class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm bg-white focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                                <option value="Employer / Sponsoring Company">Employer / Sponsoring Company</option>
+                                <option value="Self">Self</option>
+                                <option value="Shared (Self & Employer)">Shared (Self & Employer)</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 5: EDUCATION & EMPLOYMENT HISTORY -->
+                <section data-step="5" class="form-step hidden bg-white rounded-2xl border border-slate-200 p-5 sm:p-7 shadow-sm">
+                    <div class="border-b border-slate-100 pb-4 mb-6 flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-red-50 text-red-600 flex items-center justify-center font-bold">5</div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Education & Employment History</h3>
+                            <p class="text-xs text-slate-500">IRCC requires highest post-secondary education and 10-year employment history.</p>
+                        </div>
+                    </div>
+
+                    <!-- Highest Education -->
+                    <div class="mb-6">
+                        <h4 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-graduation-cap text-red-600"></i> Highest Level of Education
+                        </h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Degree / Diploma Level <span class="text-red-500">*</span></label>
+                                <input type="text" name="eduDegree" required placeholder="e.g., Bachelor of Engineering / MBA" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Field of Study <span class="text-red-500">*</span></label>
+                                <input type="text" name="eduField" required placeholder="e.g., Computer Science" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Institution / University Name <span class="text-red-500">*</span></label>
+                                <input type="text" name="eduInstitution" required placeholder="e.g., Savitribai Phule Pune University" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white">
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-700 mb-1">City & Country <span class="text-red-500">*</span></label>
+                                    <input type="text" name="eduLocation" required placeholder="Pune, India" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-700 mb-1">Completion Year <span class="text-red-500">*</span></label>
+                                    <input type="number" name="eduYear" required placeholder="2019" min="1960" max="2030" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Current Employment -->
+                    <div class="mb-6">
+                        <h4 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-briefcase text-red-600"></i> Current Employment Details
+                        </h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Current Employer Name <span class="text-red-500">*</span></label>
+                                <input type="text" name="currEmployer" value="Wipro Private Limited" required placeholder="Company Name" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Job Title / Designation <span class="text-red-500">*</span></label>
+                                <input type="text" name="currTitle" required placeholder="e.g., Senior Software Engineer" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Joining Date <span class="text-red-500">*</span></label>
+                                <input type="date" name="currJoinDate" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Work Location / Office Address <span class="text-red-500">*</span></label>
+                                <input type="text" name="currWorkAddress" required placeholder="City, State, Country" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Previous Employment History (Dynamic Rows) -->
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-clock-rotate-left text-red-600"></i> Previous Employment History (Last 10 Years)
+                            </h4>
+                            <button type="button" id="addPrevJobBtn" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-red-700 bg-red-50 hover:bg-red-100 rounded-lg border border-red-200 transition">
+                                <i class="fa-solid fa-plus"></i> Add Previous Role
+                            </button>
+                        </div>
+                        <div id="prevJobsContainer" class="space-y-3">
+                            <p id="noPrevJobsHint" class="text-xs text-slate-500 italic bg-slate-50 p-3 rounded-xl border border-dashed border-slate-200">No previous employers added. Click "+ Add Previous Role" if applicable.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 6: FAMILY INFORMATION (IMM 5645) -->
+                <section data-step="6" class="form-step hidden bg-white rounded-2xl border border-slate-200 p-5 sm:p-7 shadow-sm">
+                    <div class="border-b border-slate-100 pb-4 mb-6 flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-red-50 text-red-600 flex items-center justify-center font-bold">6</div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Family Information (IRCC IMM 5645)</h3>
+                            <p class="text-xs text-slate-500">Mandatory details of parents and children (even if not accompanying you to Canada).</p>
+                        </div>
+                    </div>
+
+                    <!-- Father's Details -->
+                    <div class="mb-5 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3">Father's Details</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Father's Full Name <span class="text-red-500">*</span></label>
+                                <input type="text" name="fatherName" required placeholder="Full Name" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Date of Birth <span class="text-red-500">*</span></label>
+                                <input type="date" name="fatherDob" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Country of Birth <span class="text-red-500">*</span></label>
+                                <input type="text" name="fatherBirthCountry" required placeholder="e.g., India" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Current Address & Occupation (or Deceased Date) <span class="text-red-500">*</span></label>
+                                <input type="text" name="fatherAddressOcc" required placeholder="e.g., Pune, India - Retired" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mother's Details -->
+                    <div class="mb-5 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3">Mother's Details</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Mother's Full Name <span class="text-red-500">*</span></label>
+                                <input type="text" name="motherName" required placeholder="Full Name" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Date of Birth <span class="text-red-500">*</span></label>
+                                <input type="date" name="motherDob" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Country of Birth <span class="text-red-500">*</span></label>
+                                <input type="text" name="motherBirthCountry" required placeholder="e.g., India" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Current Address & Occupation (or Deceased Date) <span class="text-red-500">*</span></label>
+                                <input type="text" name="motherAddressOcc" required placeholder="e.g., Pune, India - Homemaker" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Children Details (Dynamic Add-More) -->
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="text-sm font-bold text-slate-800">Children Details (If Applicable)</h4>
+                            <button type="button" id="addChildBtn" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-red-700 bg-red-50 hover:bg-red-100 rounded-lg border border-red-200 transition">
+                                <i class="fa-solid fa-plus"></i> Add Child
+                            </button>
+                        </div>
+                        <div id="childrenContainer" class="space-y-3">
+                            <p id="noChildrenHint" class="text-xs text-slate-500 italic bg-slate-50 p-3 rounded-xl border border-dashed border-slate-200">No children added. Click "+ Add Child" if you have children.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 7: BACKGROUND & SECURITY QUESTIONS -->
+                <section data-step="7" class="form-step hidden bg-white rounded-2xl border border-slate-200 p-5 sm:p-7 shadow-sm">
+                    <div class="border-b border-slate-100 pb-4 mb-6 flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-red-50 text-red-600 flex items-center justify-center font-bold">7</div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Background & Security Questions (IRCC Standard)</h3>
+                            <p class="text-xs text-slate-500">Answer truthfully. Selecting "Yes" does not automatically disqualify you, but requires full details.</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4" id="securityQuestionsContainer">
+                        <!-- Question 1 -->
+                        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/60">
+                            <p class="text-sm font-medium text-slate-800 mb-2">1. Have you ever been refused a visa or permit, denied entry, or ordered to leave Canada or any other country?</p>
+                            <div class="flex gap-5">
+                                <label class="inline-flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="sec_refusal" value="No" checked class="sec-radio text-red-600"> No</label>
+                                <label class="inline-flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="sec_refusal" value="Yes" class="sec-radio text-red-600"> Yes</label>
+                            </div>
+                            <div class="sec-explain hidden mt-3">
+                                <textarea name="sec_refusal_details" rows="2" placeholder="Provide country, date, visa type, and reason for refusal..." class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Question 2 -->
+                        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/60">
+                            <p class="text-sm font-medium text-slate-800 mb-2">2. Have you ever remained beyond the validity of your status, attended school without authorization, or worked without authorization in Canada or any country?</p>
+                            <div class="flex gap-5">
+                                <label class="inline-flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="sec_overstay" value="No" checked class="sec-radio text-red-600"> No</label>
+                                <label class="inline-flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="sec_overstay" value="Yes" class="sec-radio text-red-600"> Yes</label>
+                            </div>
+                            <div class="sec-explain hidden mt-3">
+                                <textarea name="sec_overstay_details" rows="2" placeholder="Provide full details and dates..." class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Question 3 -->
+                        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/60">
+                            <p class="text-sm font-medium text-slate-800 mb-2">3. Have you ever committed, been arrested for, been charged with, or convicted of any criminal offence in any country?</p>
+                            <div class="flex gap-5">
+                                <label class="inline-flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="sec_criminal" value="No" checked class="sec-radio text-red-600"> No</label>
+                                <label class="inline-flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="sec_criminal" value="Yes" class="sec-radio text-red-600"> Yes</label>
+                            </div>
+                            <div class="sec-explain hidden mt-3">
+                                <textarea name="sec_criminal_details" rows="2" placeholder="Provide full details..." class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Question 4 -->
+                        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/60">
+                            <p class="text-sm font-medium text-slate-800 mb-2">4. Within the past two years, have you or a family member had tuberculosis of the lungs or been in close contact with a person with tuberculosis, or had a serious medical condition?</p>
+                            <div class="flex gap-5">
+                                <label class="inline-flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="sec_medical" value="No" checked class="sec-radio text-red-600"> No</label>
+                                <label class="inline-flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="sec_medical" value="Yes" class="sec-radio text-red-600"> Yes</label>
+                            </div>
+                            <div class="sec-explain hidden mt-3">
+                                <textarea name="sec_medical_details" rows="2" placeholder="Provide medical condition details..." class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Question 5 -->
+                        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/60">
+                            <p class="text-sm font-medium text-slate-800 mb-2">5. Did you serve in any military, militia, civil defence unit, police force, or security organization?</p>
+                            <div class="flex gap-5">
+                                <label class="inline-flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="sec_military" value="No" checked class="sec-radio text-red-600"> No</label>
+                                <label class="inline-flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="sec_military" value="Yes" class="sec-radio text-red-600"> Yes</label>
+                            </div>
+                            <div class="sec-explain hidden mt-3">
+                                <textarea name="sec_military_details" rows="2" placeholder="Provide branch of service, rank, dates, and locations..." class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 8: LIVE SELFIE CAPTURE & PHOTO UPLOAD -->
+                <section data-step="8" class="form-step hidden bg-white rounded-2xl border border-slate-200 p-5 sm:p-7 shadow-sm">
+                    <div class="border-b border-slate-100 pb-4 mb-6 flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-red-50 text-red-600 flex items-center justify-center font-bold">8</div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Employee Biometric Selfie & Digital Photo</h3>
+                            <p class="text-xs text-slate-500">Capture a live selfie using your camera or upload a recent IRCC-compliant digital photo.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <!-- Guidelines Panel -->
+                        <div class="lg:col-span-5 bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-3">
+                            <h4 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-circle-info text-red-600"></i> IRCC Photo Guidelines
+                            </h4>
+                            <ul class="text-xs text-slate-600 space-y-2.5">
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-600 mt-0.5"></i> <span><strong>Plain Light Background:</strong> Stand against a plain white or off-white wall with even lighting.</span></li>
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-600 mt-0.5"></i> <span><strong>Neutral Expression:</strong> Keep your mouth closed, eyes open, and look straight at the camera.</span></li>
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-600 mt-0.5"></i> <span><strong>No Eyeglasses / Hats:</strong> Remove tinted glasses or glare-causing frames and head coverings (unless religious).</span></li>
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-600 mt-0.5"></i> <span><strong>Face Alignment:</strong> Center your head and shoulders inside the oval frame.</span></li>
+                            </ul>
+
+                            <div class="pt-3 border-t border-slate-200">
+                                <p class="text-xs font-semibold text-slate-700 mb-2">Alternative: Upload Digital Photo</p>
+                                <label class="w-full cursor-pointer inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 transition shadow-sm">
+                                    <i class="fa-solid fa-image text-red-600"></i> Upload Selfie / Photo File
+                                    <input type="file" id="selfieFileInput" accept="image/*" class="hidden">
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Live Camera & Preview Panel -->
+                        <div class="lg:col-span-7 flex flex-col items-center">
+                            <div class="relative w-full max-w-md aspect-[4/3] bg-slate-900 rounded-2xl overflow-hidden shadow-md border border-slate-300 flex items-center justify-center">
+                                <!-- Initial Placeholder -->
+                                <div id="cameraPlaceholder" class="text-center p-6 text-slate-300">
+                                    <i class="fa-solid fa-camera text-4xl mb-3 text-slate-400"></i>
+                                    <p class="text-sm font-medium text-white mb-1">Camera Ready</p>
+                                    <p class="text-xs text-slate-400 mb-4">Click below to start your front camera for live selfie verification.</p>
+                                    <button type="button" id="startCameraBtn" class="inline-flex items-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-xl shadow transition">
+                                        <i class="fa-solid fa-video"></i> Start Live Camera
+                                    </button>
+                                </div>
+
+                                <!-- Live Video Feed -->
+                                <video id="selfieVideo" autoplay playsinline muted class="hidden w-full h-full object-cover scale-x-[-1]"></video>
+                                <div id="selfieGuideOverlay" class="hidden selfie-oval-guide"></div>
+
+                                <!-- Captured / Uploaded Image Preview -->
+                                <img id="selfiePreviewImg" class="hidden w-full h-full object-cover" alt="Captured Employee Selfie">
+                                <canvas id="selfieCanvas" class="hidden"></canvas>
+                            </div>
+
+                            <!-- Camera Controls -->
+                            <div class="flex flex-wrap items-center justify-center gap-3 mt-4">
+                                <button type="button" id="captureSelfieBtn" class="hidden inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-xl shadow transition">
+                                    <i class="fa-solid fa-camera"></i> Capture Selfie
+                                </button>
+                                <button type="button" id="retakeSelfieBtn" class="hidden inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold rounded-xl shadow transition">
+                                    <i class="fa-solid fa-rotate-right"></i> Retake / Re-open Camera
+                                </button>
+                            </div>
+                            <p id="selfieStatusBadge" class="mt-2 text-xs font-medium text-slate-500">No selfie captured yet (Required before submission).</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 9: DECLARATION & DIGITAL SIGNATURE -->
+                <section data-step="9" class="form-step hidden bg-white rounded-2xl border border-slate-200 p-5 sm:p-7 shadow-sm">
+                    <div class="border-b border-slate-100 pb-4 mb-6 flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-red-50 text-red-600 flex items-center justify-center font-bold">9</div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Declaration & Digital Signature</h3>
+                            <p class="text-xs text-slate-500">Review your details, sign below, and submit your visa packet to HR.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-5 text-xs text-amber-900 leading-relaxed">
+                        <strong>Applicant Declaration:</strong> I declare that the information I have given in this application is truthful, complete, and correct. I understand that any false statements or misrepresentation may result in the refusal of my Canada visa application and/or inadmissibility to Canada under the Immigration and Refugee Protection Act (IRPA). I authorize my employer and designated immigration representatives to use this information and biometric selfie solely for visa processing.
+                    </div>
+
+                    <div class="mb-5">
+                        <label class="inline-flex items-start gap-2.5 text-sm font-medium text-slate-800 cursor-pointer">
+                            <input type="checkbox" id="declarationCheckbox" required class="mt-1 rounded text-red-600 focus:ring-red-500 w-4 h-4">
+                            <span>I have read and agree to the above declaration and confirm all details are accurate. <span class="text-red-500">*</span></span>
+                        </label>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 items-start">
+                        <!-- Canvas Signature Pad -->
+                        <div>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label class="block text-sm font-medium text-slate-700">Draw Your Signature <span class="text-red-500">*</span></label>
+                                <button type="button" id="clearSignatureBtn" class="text-xs font-semibold text-red-600 hover:underline">Clear Pad</button>
+                            </div>
+                            <div class="border-2 border-slate-300 rounded-xl bg-slate-50 overflow-hidden touch-none">
+                                <canvas id="signatureCanvas" class="w-full h-36 block cursor-crosshair"></canvas>
+                            </div>
+                            <p class="text-[11px] text-slate-500 mt-1">Use your mouse or finger/stylus to sign inside the box.</p>
+                        </div>
+
+                        <!-- Typed Name & Date -->
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Typed Full Legal Name <span class="text-red-500">*</span></label>
+                                <input type="text" name="typedSignature" value="Sushant Dada Patil" required placeholder="Type your full name as per passport" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Date of Signing</label>
+                                <input type="date" name="signatureDate" id="signatureDate" readonly class="w-full rounded-xl border border-slate-200 bg-slate-100 px-3.5 py-2.5 text-sm text-slate-600">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Step Navigation & Submit Bar -->
+                <div class="flex items-center justify-between bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+                    <button type="button" id="prevStepBtn" class="hidden inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition">
+                        <i class="fa-solid fa-arrow-left"></i> Previous
+                    </button>
+                    <div class="ml-auto flex items-center gap-3">
+                        <button type="button" id="nextStepBtn" class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-xl shadow-sm transition">
+                            Next Section <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                        <button type="submit" id="submitFormBtn" class="hidden inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-xl shadow-sm transition">
+                            <i class="fa-solid fa-paper-plane"></i> Submit Visa Application
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Submission Confirmation Screen -->
+            <div id="submissionSuccessView" class="hidden bg-white rounded-2xl border border-slate-200 p-8 sm:p-10 text-center shadow-sm">
+                <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4 text-3xl">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-900 mb-2">Canada Visa Details Submitted!</h2>
+                <p class="text-sm text-slate-600 max-w-md mx-auto mb-6">
+                    Thank you. Your complete IRCC visa profile, passport scan, and biometric selfie have been securely recorded for HR & Immigration processing.
+                </p>
+                <div class="inline-block bg-slate-50 border border-slate-200 rounded-xl px-5 py-3 mb-6">
+                    <span class="text-xs text-slate-500 block">Application Reference ID</span>
+                    <span id="submittedRefId" class="text-base font-mono font-bold text-slate-900">CAN-2026-XXXX</span>
+                </div>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <button type="button" id="submitAnotherBtn" class="px-5 py-2.5 text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition">
+                        Submit Another Application
+                    </button>
+                    <button type="button" id="viewInHrBtn" class="px-5 py-2.5 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-xl transition">
+                        Open HR Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- VIEW 2: HR / ADMIN SUBMISSIONS DASHBOARD                  -->
+        <!-- ========================================================= -->
+        <div id="hrDashboardView" class="hidden">
+            
+            <!-- HR PIN Gate -->
+            <div id="hrPinGate" class="max-w-md mx-auto bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm text-center my-8">
+                <div class="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center mx-auto mb-4 text-xl">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h2 class="text-xl font-bold text-slate-900 mb-1">HR & Immigration Admin Access</h2>
+                <p class="text-xs text-slate-500 mb-5">Enter the 4-digit HR PIN to inspect employee visa submissions and selfies. <br><span class="text-red-600 font-semibold">(Default Demo PIN: 1234)</span></p>
+                
+                <div class="flex justify-center gap-2 mb-4">
+                    <input type="password" id="hrPinInput" maxlength="4" placeholder="••••" class="w-40 text-center tracking-[0.5em] text-xl font-bold rounded-xl border border-slate-300 px-4 py-2.5 focus:border-red-500 focus:ring-2 focus:ring-red-200 outline-none">
+                </div>
+                <button type="button" id="unlockHrBtn" class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-xl shadow-sm transition">
+                    Unlock Dashboard
+                </button>
+            </div>
+
+            <!-- Unlocked HR Dashboard Content -->
+            <div id="hrContentArea" class="hidden space-y-6">
+                <!-- Dashboard Header & Export Controls -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900">Employee Visa Submissions</h2>
+                        <p class="text-xs text-slate-500">Real-time IRCC visa applications, passport records, and biometric selfies.</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2.5">
+                        <span id="submissionCountBadge" class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 text-xs font-bold border border-slate-200">
+                            0 Submissions
+                        </span>
+                        <button type="button" id="exportAllCsvBtn" class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 rounded-xl shadow-sm transition">
+                            <i class="fa-solid fa-file-csv text-emerald-600"></i> Export CSV
+                        </button>
+                        <button type="button" id="lockHrBtn" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 bg-slate-100 rounded-xl transition">
+                            <i class="fa-solid fa-lock"></i> Lock
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Submissions Grid -->
+                <div id="submissionsListContainer" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Populated dynamically from Firestore -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Submission Inspection & Printable PDF Summary Modal -->
+    <div id="detailModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+        <div id="printModalContent" class="bg-white rounded-2xl border border-slate-200 max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            <!-- Modal Header -->
+            <div class="sticky top-0 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between z-10">
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-brands fa-canadian-maple-leaf text-red-600 text-xl"></i>
+                    <div>
+                        <h3 id="modalEmployeeName" class="text-lg font-bold text-slate-900">Employee Visa Summary</h3>
+                        <p id="modalRefId" class="text-xs text-slate-500 font-mono">REF-ID</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 no-print">
+                    <button type="button" id="printSummaryBtn" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-xl shadow-sm transition">
+                        <i class="fa-solid fa-print"></i> Print / Save PDF
+                    </button>
+                    <button type="button" id="downloadJsonBtn" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold rounded-xl transition">
+                        <i class="fa-solid fa-download"></i> JSON
+                    </button>
+                    <button type="button" id="closeModalBtn" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Body -->
+            <div id="modalBodyContent" class="p-6 space-y-6 text-sm">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-4 mt-10">
+        <div class="max-w-6xl mx-auto px-4 text-center text-xs text-slate-500">
+            Corporate Canada Visa & Immigration Onboarding Portal &bull; Secure IRCC Data & Biometric Collection
+        </div>
+    </footer>
+
+    <!-- Firebase & Application Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // ==========================================
+        // 1. FIREBASE INITIALIZATION & AUTHENTICATION
+        // ==========================================
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'canada-visa-portal';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+
+        let db = null;
+        let auth = null;
+        let currentUser = null;
+        let submissionsCache = [];
+        let activeModalRecord = null;
+
+        // Toast Helper (Never use alert())
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const colors = {
+                success: 'bg-emerald-900 text-white border-emerald-700',
+                error: 'bg-red-900 text-white border-red-700',
+                info: 'bg-slate-900 text-white border-slate-700'
+            };
+            const icons = {
+                success: 'fa-circle-check text-emerald-400',
+                error: 'fa-circle-exclamation text-red-400',
+                info: 'fa-circle-info text-sky-400'
+            };
+            toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl border shadow-lg text-xs font-medium transition-all duration-300 ${colors[type] || colors.info}`;
+            toast.innerHTML = `<i class="fa-solid ${icons[type] || icons.info} text-base"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        async function initFirebase() {
+            if (!firebaseConfig) {
+                console.warn("Firebase config not found. Running in local fallback mode.");
+                return;
+            }
+            try {
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                onAuthStateChanged(auth, (user) => {
+                    currentUser = user;
+                    if (user) {
+                        subscribeToSubmissions();
+                    }
+                });
+            } catch (err) {
+                console.error("Firebase init error:", err);
+                showToast("Cloud connection warning: " + err.message, "error");
+            }
+        }
+
+        function subscribeToSubmissions() {
+            if (!db || !currentUser) return;
+            // Strict Rule 1 Path: /artifacts/{appId}/public/data/{collectionName}
+            const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'visa_submissions');
+            // Strict Rule 2: Simple collection query without orderBy/where
+            onSnapshot(colRef, (snapshot) => {
+                const items = [];
+                snapshot.forEach((docSnap) => {
+                    items.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                // Sort in JS memory by createdAt descending
+                items.sort((a, b) => (b.submittedTimestamp || 0) - (a.submittedTimestamp || 0));
+                submissionsCache = items;
+                renderHrDashboard();
+            }, (error) => {
+                console.error("Firestore subscription error:", error);
+                showToast("Error loading submissions: " + error.message, "error");
+            });
+        }
+
+        // ==========================================
+        // 2. MULTI-STEP FORM NAVIGATION & VALIDATION
+        // ==========================================
+        const stepTitles = [
+            "Personal Details",
+            "Passport Details",
+            "Contact & Address",
+            "Canada Stay Details",
+            "Education & Work",
+            "Family Information",
+            "Security Questions",
+            "Live Selfie & Photo",
+            "Declaration & Sign"
+        ];
+        let currentStep = 1;
+        const totalSteps = 9;
+
+        const formSteps = document.querySelectorAll('.form-step');
+        const stepPillsContainer = document.getElementById('stepPillsContainer');
+        const prevStepBtn = document.getElementById('prevStepBtn');
+        const nextStepBtn = document.getElementById('nextStepBtn');
+        const submitFormBtn = document.getElementById('submitFormBtn');
+
+        // Build Quick Jump Pills
+        stepTitles.forEach((title, idx) => {
+            const stepNum = idx + 1;
+            const pill = document.createElement('button');
+            pill.type = 'button';
+            pill.dataset.jumpStep = stepNum;
+            pill.className = 'step-pill shrink-0 px-2.5 py-1 rounded-lg font-medium transition border';
+            pill.textContent = `${stepNum}. ${title}`;
+            pill.addEventListener('click', () => {
+                if (stepNum < currentStep || validateCurrentStep()) {
+                    goToStep(stepNum);
+                }
+            });
+            stepPillsContainer.appendChild(pill);
+        });
+
+        function goToStep(step) {
+            currentStep = step;
+            formSteps.forEach((sec) => {
+                sec.classList.toggle('hidden', parseInt(sec.dataset.step) !== currentStep);
+            });
+
+            // Update Progress Bar & Labels
+            const pct = Math.round((currentStep / totalSteps) * 100);
+            document.getElementById('currentStepLabel').textContent = `Step ${currentStep} of ${totalSteps}: ${stepTitles[currentStep - 1]}`;
+            document.getElementById('progressPercentage').textContent = `${pct}% Complete`;
+            document.getElementById('progressBar').style.width = `${pct}%`;
+
+            // Update Pills
+            document.querySelectorAll('.step-pill').forEach((pill) => {
+                const s = parseInt(pill.dataset.jumpStep);
+                if (s === currentStep) {
+                    pill.className = 'step-pill shrink-0 px-2.5 py-1 rounded-lg font-semibold bg-red-600 text-white border-red-600';
+                } else if (s < currentStep) {
+                    pill.className = 'step-pill shrink-0 px-2.5 py-1 rounded-lg font-medium bg-emerald-50 text-emerald-700 border-emerald-200';
+                } else {
+                    pill.className = 'step-pill shrink-0 px-2.5 py-1 rounded-lg font-medium bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100';
+                }
+            });
+
+            // Toggle Navigation Buttons
+            prevStepBtn.classList.toggle('hidden', currentStep === 1);
+            nextStepBtn.classList.toggle('hidden', currentStep === totalSteps);
+            submitFormBtn.classList.toggle('hidden', currentStep !== totalSteps);
+
+            // Resize signature canvas when reaching step 9
+            if (currentStep === 9) {
+                resizeSignatureCanvas();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function validateCurrentStep() {
+            const activeSection = document.querySelector(`.form-step[data-step="${currentStep}"]`);
+            const requiredInputs = activeSection.querySelectorAll('[required]');
+            let valid = true;
+
+            requiredInputs.forEach((input) => {
+                // Skip hidden fields
+                if (input.offsetParent === null) return;
+                if (!input.value.trim() || (input.type === 'checkbox' && !input.checked)) {
+                    input.classList.add('border-red-500', 'ring-2', 'ring-red-200');
+                    valid = false;
+                } else {
+                    input.classList.remove('border-red-500', 'ring-2', 'ring-red-200');
+                }
+            });
+
+            // Custom validation for Step 8 (Selfie Required)
+            if (currentStep === 8 && !capturedSelfieDataUrl) {
+                showToast("Please capture a live selfie or upload a photo before continuing.", "error");
+                return false;
+            }
+
+            if (!valid) {
+                showToast("Please fill in all required fields highlighted in red.", "error");
+            }
+            return valid;
+        }
+
+        prevStepBtn.addEventListener('click', () => {
+            if (currentStep > 1) goToStep(currentStep - 1);
+        });
+
+        nextStepBtn.addEventListener('click', () => {
+            if (validateCurrentStep() && currentStep < totalSteps) {
+                goToStep(currentStep + 1);
+            }
+        });
+
+        // ==========================================
+        // 3. CONDITIONAL FIELDS & DYNAMIC ROWS
+        // ==========================================
+        // Other Name Radio
+        document.querySelectorAll('input[name="hasOtherName"]').forEach(r => {
+            r.addEventListener('change', (e) => {
+                document.getElementById('otherNameContainer').classList.toggle('hidden', e.target.value !== 'Yes');
+            });
+        });
+
+        // Marital Status Spouse Box
+        document.getElementById('maritalStatusSelect').addEventListener('change', (e) => {
+            const showSpouse = ['Married', 'Common-Law'].includes(e.target.value);
+            document.getElementById('spouseDetailsBox').classList.toggle('hidden', !showSpouse);
+        });
+
+        // Mailing Address Checkbox
+        document.getElementById('sameAsResidential').addEventListener('change', (e) => {
+            document.getElementById('mailingAddressBox').classList.toggle('hidden', e.target.checked);
+        });
+
+        // Security Questions Conditional Textareas
+        document.querySelectorAll('.sec-radio').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const container = e.target.closest('div').parentElement;
+                const explainBox = container.querySelector('.sec-explain');
+                explainBox.classList.toggle('hidden', e.target.value !== 'Yes');
+            });
+        });
+
+        // Add Previous Employment Row
+        document.getElementById('addPrevJobBtn').addEventListener('click', () => {
+            document.getElementById('noPrevJobsHint').classList.add('hidden');
+            const container = document.getElementById('prevJobsContainer');
+            const row = document.createElement('div');
+            row.className = 'prev-job-row grid grid-cols-1 sm:grid-cols-4 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200 relative';
+            row.innerHTML = `
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-600 mb-1">Company Name</label>
+                    <input type="text" class="pj-company w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs bg-white" placeholder="Company">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-600 mb-1">Job Title / Role</label>
+                    <input type="text" class="pj-role w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs bg-white" placeholder="Role">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-600 mb-1">From - To (YYYY-MM)</label>
+                    <input type="text" class="pj-dates w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs bg-white" placeholder="2018-06 to 2021-08">
+                </div>
+                <div class="flex items-end gap-2">
+                    <div class="flex-1">
+                        <label class="block text-[11px] font-medium text-slate-600 mb-1">City & Country</label>
+                        <input type="text" class="pj-location w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs bg-white" placeholder="Mumbai, India">
+                    </div>
+                    <button type="button" class="remove-row-btn px-2.5 py-1.5 bg-red-100 text-red-700 rounded-lg text-xs hover:bg-red-200"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `;
+            row.querySelector('.remove-row-btn').addEventListener('click', () => {
+                row.remove();
+                if (container.querySelectorAll('.prev-job-row').length === 0) {
+                    document.getElementById('noPrevJobsHint').classList.remove('hidden');
+                }
+            });
+            container.appendChild(row);
+        });
+
+        // Add Child Row
+        document.getElementById('addChildBtn').addEventListener('click', () => {
+            document.getElementById('noChildrenHint').classList.add('hidden');
+            const container = document.getElementById('childrenContainer');
+            const row = document.createElement('div');
+            row.className = 'child-row grid grid-cols-1 sm:grid-cols-4 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200';
+            row.innerHTML = `
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-600 mb-1">Child's Full Name</label>
+                    <input type="text" class="ch-name w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs bg-white" placeholder="Full Name">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-600 mb-1">Date of Birth</label>
+                    <input type="date" class="ch-dob w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs bg-white">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-600 mb-1">Country of Birth</label>
+                    <input type="text" class="ch-country w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs bg-white" placeholder="India">
+                </div>
+                <div class="flex items-end gap-2">
+                    <div class="flex-1">
+                        <label class="block text-[11px] font-medium text-slate-600 mb-1">Accompanying?</label>
+                        <select class="ch-accompany w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs bg-white">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                    <button type="button" class="remove-row-btn px-2.5 py-1.5 bg-red-100 text-red-700 rounded-lg text-xs hover:bg-red-200"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `;
+            row.querySelector('.remove-row-btn').addEventListener('click', () => {
+                row.remove();
+                if (container.querySelectorAll('.child-row').length === 0) {
+                    document.getElementById('noChildrenHint').classList.remove('hidden');
+                }
+            });
+            container.appendChild(row);
+        });
+
+        // ==========================================
+        // 4. IMAGE COMPRESSION & PASSPORT FILE UPLOAD
+        // ==========================================
+        let passportDataUrl = null;
+        let passportFileNameText = "";
+
+        function compressImageFile(file, maxWidth = 800, quality = 0.75) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    if (file.type === 'application/pdf') {
+                        resolve(event.target.result);
+                        return;
+                    }
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+                        if (width > maxWidth) {
+                            height = Math.round((height * maxWidth) / width);
+                            width = maxWidth;
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        resolve(canvas.toDataURL('image/jpeg', quality));
+                    };
+                    img.onerror = reject;
+                    img.src = event.target.result;
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        document.getElementById('passportFileInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            try {
+                passportFileNameText = file.name;
+                const compressed = await compressImageFile(file, 850, 0.72);
+                passportDataUrl = compressed;
+
+                const previewBox = document.getElementById('passportPreviewBox');
+                const fileNameBadge = document.getElementById('passportFileName');
+                const imgPreview = document.getElementById('passportImgPreview');
+
+                previewBox.classList.remove('hidden');
+                fileNameBadge.innerHTML = `<i class="fa-solid fa-file-circle-check"></i> ${file.name}`;
+                if (file.type.startsWith('image/')) {
+                    imgPreview.src = compressed;
+                    imgPreview.classList.remove('hidden');
+                } else {
+                    imgPreview.classList.add('hidden');
+                }
+                showToast("Passport document attached successfully.", "success");
+            } catch (err) {
+                showToast("Could not process passport file.", "error");
+            }
+        });
+
+        // ==========================================
+        // 5. LIVE CAMERA SELFIE & UPLOAD FALLBACK
+        // ==========================================
+        let mediaStream = null;
+        let capturedSelfieDataUrl = null;
+
+        const startCameraBtn = document.getElementById('startCameraBtn');
+        const captureSelfieBtn = document.getElementById('captureSelfieBtn');
+        const retakeSelfieBtn = document.getElementById('retakeSelfieBtn');
+        const selfieVideo = document.getElementById('selfieVideo');
+        const selfieGuideOverlay = document.getElementById('selfieGuideOverlay');
+        const cameraPlaceholder = document.getElementById('cameraPlaceholder');
+        const selfiePreviewImg = document.getElementById('selfiePreviewImg');
+        const selfieCanvas = document.getElementById('selfieCanvas');
+        const selfieStatusBadge = document.getElementById('selfieStatusBadge');
+
+        async function startSelfieCamera() {
+            try {
+                if (mediaStream) {
+                    mediaStream.getTracks().forEach(t => t.stop());
+                }
+                mediaStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
+                    audio: false
+                });
+                selfieVideo.srcObject = mediaStream;
+                cameraPlaceholder.classList.add('hidden');
+                selfiePreviewImg.classList.add('hidden');
+                selfieVideo.classList.remove('hidden');
+                selfieGuideOverlay.classList.remove('hidden');
+                captureSelfieBtn.classList.remove('hidden');
+                retakeSelfieBtn.classList.add('hidden');
+            } catch (err) {
+                console.error("Camera error:", err);
+                showToast("Camera access denied or unavailable. Please use 'Upload Selfie / Photo File'.", "error");
+            }
+        }
+
+        function stopSelfieCamera() {
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(t => t.stop());
+                mediaStream = null;
+            }
+        }
+
+        startCameraBtn.addEventListener('click', startSelfieCamera);
+
+        captureSelfieBtn.addEventListener('click', () => {
+            if (!selfieVideo.videoWidth) return;
+            selfieCanvas.width = 640;
+            selfieCanvas.height = 480;
+            const ctx = selfieCanvas.getContext('2d');
+            // Un-mirror horizontally so captured selfie matches natural orientation
+            ctx.translate(selfieCanvas.width, 0);
+            ctx.scale(-1, 1);
+            ctx.drawImage(selfieVideo, 0, 0, selfieCanvas.width, selfieCanvas.height);
+
+            capturedSelfieDataUrl = selfieCanvas.toDataURL('image/jpeg', 0.8);
+            stopSelfieCamera();
+
+            selfieVideo.classList.add('hidden');
+            selfieGuideOverlay.classList.add('hidden');
+            captureSelfieBtn.classList.add('hidden');
+
+            selfiePreviewImg.src = capturedSelfieDataUrl;
+            selfiePreviewImg.classList.remove('hidden');
+            retakeSelfieBtn.classList.remove('hidden');
+
+            selfieStatusBadge.innerHTML = `<span class="text-emerald-600 font-semibold"><i class="fa-solid fa-circle-check"></i> Live Selfie Captured & Ready</span>`;
+            showToast("Selfie captured successfully!", "success");
+        });
+
+        retakeSelfieBtn.addEventListener('click', () => {
+            capturedSelfieDataUrl = null;
+            selfieStatusBadge.textContent = "No selfie captured yet (Required before submission).";
+            startSelfieCamera();
+        });
+
+        document.getElementById('selfieFileInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            try {
+                stopSelfieCamera();
+                capturedSelfieDataUrl = await compressImageFile(file, 640, 0.8);
+                cameraPlaceholder.classList.add('hidden');
+                selfieVideo.classList.add('hidden');
+                selfieGuideOverlay.classList.add('hidden');
+                captureSelfieBtn.classList.add('hidden');
+
+                selfiePreviewImg.src = capturedSelfieDataUrl;
+                selfiePreviewImg.classList.remove('hidden');
+                retakeSelfieBtn.classList.remove('hidden');
+
+                selfieStatusBadge.innerHTML = `<span class="text-emerald-600 font-semibold"><i class="fa-solid fa-circle-check"></i> Digital Photo Uploaded (${file.name})</span>`;
+                showToast("Selfie photo uploaded successfully!", "success");
+            } catch (err) {
+                showToast("Failed to load uploaded photo.", "error");
+            }
+        });
+
+        // ==========================================
+        // 6. DIGITAL SIGNATURE PAD
+        // ==========================================
+        const sigCanvas = document.getElementById('signatureCanvas');
+        const sigCtx = sigCanvas.getContext('2d');
+        let isDrawing = false;
+        let hasSigned = false;
+
+        // Set today's date automatically
+        document.getElementById('signatureDate').value = new Date().toISOString().split('T')[0];
+
+        function resizeSignatureCanvas() {
+            const rect = sigCanvas.parentElement.getBoundingClientRect();
+            sigCanvas.width = rect.width || 400;
+            sigCanvas.height = 144;
+            sigCtx.strokeStyle = '#0f172a';
+            sigCtx.lineWidth = 2.2;
+            sigCtx.lineCap = 'round';
+            sigCtx.lineJoin = 'round';
+        }
+
+        function getSigCoords(e) {
+            const rect = sigCanvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        sigCanvas.addEventListener('mousedown', (e) => {
+            isDrawing = true;
+            hasSigned = true;
+            const pos = getSigCoords(e);
+            sigCtx.beginPath();
+            sigCtx.moveTo(pos.x, pos.y);
+        });
+        sigCanvas.addEventListener('mousemove', (e) => {
+            if (!isDrawing) return;
+            const pos = getSigCoords(e);
+            sigCtx.lineTo(pos.x, pos.y);
+            sigCtx.stroke();
+        });
+        window.addEventListener('mouseup', () => { isDrawing = false; });
+
+        sigCanvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            isDrawing = true;
+            hasSigned = true;
+            const pos = getSigCoords(e);
+            sigCtx.beginPath();
+            sigCtx.moveTo(pos.x, pos.y);
+        }, { passive: false });
+        sigCanvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (!isDrawing) return;
+            const pos = getSigCoords(e);
+            sigCtx.lineTo(pos.x, pos.y);
+            sigCtx.stroke();
+        }, { passive: false });
+        sigCanvas.addEventListener('touchend', () => { isDrawing = false; });
+
+        document.getElementById('clearSignatureBtn').addEventListener('click', () => {
+            sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+            hasSigned = false;
+        });
+
+        // ==========================================
+        // 7. FORM SUBMISSION TO FIRESTORE
+        // ==========================================
+        const visaForm = document.getElementById('visaApplicationForm');
+        visaForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!validateCurrentStep()) return;
+
+            if (!capturedSelfieDataUrl) {
+                showToast("Selfie photo is missing. Please go to Step 8.", "error");
+                goToStep(8);
+                return;
+            }
+            if (!hasSigned) {
+                showToast("Please draw your signature in the signature box.", "error");
+                return;
+            }
+
+            submitFormBtn.disabled = true;
+            submitFormBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Submitting...`;
+
+            try {
+                const fd = new FormData(visaForm);
+                const refId = `CAN-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+
+                // Collect Dynamic Previous Jobs
+                const prevJobs = [];
+                document.querySelectorAll('.prev-job-row').forEach(row => {
+                    prevJobs.push({
+                        company: row.querySelector('.pj-company').value,
+                        role: row.querySelector('.pj-role').value,
+                        dates: row.querySelector('.pj-dates').value,
+                        location: row.querySelector('.pj-location').value
+                    });
+                });
+
+                // Collect Dynamic Children
+                const children = [];
+                document.querySelectorAll('.child-row').forEach(row => {
+                    children.push({
+                        name: row.querySelector('.ch-name').value,
+                        dob: row.querySelector('.ch-dob').value,
+                        country: row.querySelector('.ch-country').value,
+                        accompany: row.querySelector('.ch-accompany').value
+                    });
+                });
+
+                const payload = {
+                    referenceId: refId,
+                    submittedTimestamp: Date.now(),
+                    submittedAtStr: new Date().toLocaleString(),
+                    // Section 1
+                    surname: fd.get('surname'),
+                    givenNames: fd.get('givenNames'),
+                    hasOtherName: fd.get('hasOtherName'),
+                    otherNameDetails: fd.get('otherNameDetails') || '',
+                    gender: fd.get('gender'),
+                    dob: fd.get('dob'),
+                    birthCity: fd.get('birthCity'),
+                    birthCountry: fd.get('birthCountry'),
+                    citizenship: fd.get('citizenship'),
+                    residenceStatus: fd.get('residenceStatus'),
+                    maritalStatus: fd.get('maritalStatus'),
+                    nationalId: fd.get('nationalId') || '',
+                    spouseName: fd.get('spouseName') || '',
+                    spouseDob: fd.get('spouseDob') || '',
+                    marriageDate: fd.get('marriageDate') || '',
+                    // Section 2
+                    passportNumber: fd.get('passportNumber'),
+                    passportCountry: fd.get('passportCountry'),
+                    passportIssueDate: fd.get('passportIssueDate'),
+                    passportExpiryDate: fd.get('passportExpiryDate'),
+                    passportFileName: passportFileNameText,
+                    passportDataUrl: passportDataUrl || '',
+                    // Section 3
+                    resStreet: fd.get('resStreet'),
+                    resCity: fd.get('resCity'),
+                    resState: fd.get('resState'),
+                    resPostal: fd.get('resPostal'),
+                    resCountry: fd.get('resCountry'),
+                    mailingAddress: document.getElementById('sameAsResidential').checked
+                        ? 'Same as Residential Address'
+                        : (fd.get('mailingAddress') || ''),
+                    email: fd.get('email'),
+                    primaryPhone: fd.get('primaryPhone'),
+                    altPhone: fd.get('altPhone') || '',
+                    // Section 4
+                    visaCategory: fd.get('visaCategory'),
+                    stayDuration: fd.get('stayDuration'),
+                    arrivalDate: fd.get('arrivalDate'),
+                    departureDate: fd.get('departureDate'),
+                    hostDetails: fd.get('hostDetails'),
+                    fundsAvailable: fd.get('fundsAvailable'),
+                    tripFunder: fd.get('tripFunder'),
+                    // Section 5
+                    eduDegree: fd.get('eduDegree'),
+                    eduField: fd.get('eduField'),
+                    eduInstitution: fd.get('eduInstitution'),
+                    eduLocation: fd.get('eduLocation'),
+                    eduYear: fd.get('eduYear'),
+                    currEmployer: fd.get('currEmployer'),
+                    currTitle: fd.get('currTitle'),
+                    currJoinDate: fd.get('currJoinDate'),
+                    currWorkAddress: fd.get('currWorkAddress'),
+                    previousJobs: JSON.stringify(prevJobs),
+                    // Section 6
+                    fatherName: fd.get('fatherName'),
+                    fatherDob: fd.get('fatherDob'),
+                    fatherBirthCountry: fd.get('fatherBirthCountry'),
+                    fatherAddressOcc: fd.get('fatherAddressOcc'),
+                    motherName: fd.get('motherName'),
+                    motherDob: fd.get('motherDob'),
+                    motherBirthCountry: fd.get('motherBirthCountry'),
+                    motherAddressOcc: fd.get('motherAddressOcc'),
+                    childrenList: JSON.stringify(children),
+                    // Section 7
+                    sec_refusal: fd.get('sec_refusal'),
+                    sec_refusal_details: fd.get('sec_refusal_details') || '',
+                    sec_overstay: fd.get('sec_overstay'),
+                    sec_overstay_details: fd.get('sec_overstay_details') || '',
+                    sec_criminal: fd.get('sec_criminal'),
+                    sec_criminal_details: fd.get('sec_criminal_details') || '',
+                    sec_medical: fd.get('sec_medical'),
+                    sec_medical_details: fd.get('sec_medical_details') || '',
+                    sec_military: fd.get('sec_military'),
+                    sec_military_details: fd.get('sec_military_details') || '',
+                    // Section 8 & 9
+                    selfieDataUrl: capturedSelfieDataUrl,
+                    signatureDataUrl: sigCanvas.toDataURL('image/png'),
+                    typedSignature: fd.get('typedSignature'),
+                    signatureDate: fd.get('signatureDate')
+                };
+
+                if (db && currentUser) {
+                    const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'visa_submissions');
+                    await addDoc(colRef, payload);
+                } else {
+                    submissionsCache.unshift({ id: refId, ...payload });
+                    renderHrDashboard();
+                }
+
+                document.getElementById('submittedRefId').textContent = refId;
+                visaForm.classList.add('hidden');
+                document.getElementById('submissionSuccessView').classList.remove('hidden');
+                showToast("Visa application submitted to HR!", "success");
+            } catch (err) {
+                console.error("Submission error:", err);
+                showToast("Submission failed: " + err.message, "error");
+            } finally {
+                submitFormBtn.disabled = false;
+                submitFormBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Submit Visa Application`;
+            }
+        });
+
+        // Reset Form for Another Application
+        document.getElementById('submitAnotherBtn').addEventListener('click', () => {
+            visaForm.reset();
+            visaForm.querySelector('[name="surname"]').value = 'PATIL';
+            visaForm.querySelector('[name="givenNames"]').value = 'SUSHANT DADA';
+            visaForm.querySelector('[name="currEmployer"]').value = 'Wipro Private Limited';
+            visaForm.querySelector('[name="typedSignature"]').value = 'Sushant Dada Patil';
+            capturedSelfieDataUrl = null;
+            passportDataUrl = null;
+            hasSigned = false;
+            sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+            selfiePreviewImg.classList.add('hidden');
+            cameraPlaceholder.classList.remove('hidden');
+            retakeSelfieBtn.classList.add('hidden');
+            document.getElementById('passportPreviewBox').classList.add('hidden');
+            document.getElementById('signatureDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('submissionSuccessView').classList.add('hidden');
+            visaForm.classList.remove('hidden');
+            goToStep(1);
+        });
+
+        // ==========================================
+        // 8. HR DASHBOARD, PIN LOCK & EXPORT TOOLS
+        // ==========================================
+        const tabEmployeeBtn = document.getElementById('tabEmployeeBtn');
+        const tabHrBtn = document.getElementById('tabHrBtn');
+        const employeeFormView = document.getElementById('employeeFormView');
+        const hrDashboardView = document.getElementById('hrDashboardView');
+        let isHrUnlocked = false;
+
+        function switchTab(mode) {
+            if (mode === 'employee') {
+                employeeFormView.classList.remove('hidden');
+                hrDashboardView.classList.add('hidden');
+                tabEmployeeBtn.className = 'px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-md bg-white text-slate-900 shadow-sm transition';
+                tabHrBtn.className = 'px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md text-slate-600 hover:text-slate-900 transition';
+            } else {
+                stopSelfieCamera();
+                employeeFormView.classList.add('hidden');
+                hrDashboardView.classList.remove('hidden');
+                tabHrBtn.className = 'px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-md bg-white text-slate-900 shadow-sm transition';
+                tabEmployeeBtn.className = 'px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md text-slate-600 hover:text-slate-900 transition';
+                if (isHrUnlocked) renderHrDashboard();
+            }
+        }
+
+        tabEmployeeBtn.addEventListener('click', () => switchTab('employee'));
+        tabHrBtn.addEventListener('click', () => switchTab('hr'));
+        document.getElementById('viewInHrBtn').addEventListener('click', () => switchTab('hr'));
+
+        document.getElementById('unlockHrBtn').addEventListener('click', () => {
+            const pin = document.getElementById('hrPinInput').value.trim();
+            if (pin === '1234') {
+                isHrUnlocked = true;
+                document.getElementById('hrPinGate').classList.add('hidden');
+                document.getElementById('hrContentArea').classList.remove('hidden');
+                renderHrDashboard();
+                showToast("HR Dashboard unlocked.", "success");
+            } else {
+                showToast("Invalid PIN. Hint: Use default demo PIN 1234.", "error");
+            }
+        });
+
+        document.getElementById('lockHrBtn').addEventListener('click', () => {
+            isHrUnlocked = false;
+            document.getElementById('hrPinInput').value = '';
+            document.getElementById('hrContentArea').classList.add('hidden');
+            document.getElementById('hrPinGate').classList.remove('hidden');
+        });
+
+        function renderHrDashboard() {
+            const container = document.getElementById('submissionsListContainer');
+            document.getElementById('submissionCountBadge').textContent = `${submissionsCache.length} Submission${submissionsCache.length === 1 ? '' : 's'}`;
+
+            if (submissionsCache.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full bg-white rounded-2xl border border-dashed border-slate-300 p-10 text-center">
+                        <i class="fa-solid fa-folder-open text-4xl text-slate-300 mb-3"></i>
+                        <h3 class="text-base font-bold text-slate-800">No Employee Submissions Yet</h3>
+                        <p class="text-xs text-slate-500 mt-1">Share the Employee Form Link with your team. Submitted applications and selfies will appear here automatically.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = '';
+            submissionsCache.forEach((item) => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between gap-4';
+                card.innerHTML = `
+                    <div class="flex items-start gap-4">
+                        <img src="${item.selfieDataUrl || 'https://placehold.co/120x120/e2e8f0/475569?text=No+Selfie'}" alt="Employee Selfie" class="w-20 h-20 rounded-xl object-cover border border-slate-200 shrink-0 bg-slate-100">
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center justify-between gap-2">
+                                <span class="text-[11px] font-mono font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded border border-red-100">${item.referenceId || 'REF'}</span>
+                                <span class="text-[11px] text-slate-400">${item.signatureDate || ''}</span>
+                            </div>
+                            <h3 class="text-base font-bold text-slate-900 truncate mt-1">${item.givenNames || ''} ${item.surname || ''}</h3>
+                            <p class="text-xs text-slate-600 truncate">${item.currTitle || 'Employee'} &bull; ${item.currEmployer || ''}</p>
+                            <div class="mt-2 flex flex-wrap gap-1.5 text-[11px]">
+                                <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700"><i class="fa-solid fa-passport mr-1 text-slate-400"></i>${item.passportNumber || 'N/A'}</span>
+                                <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 truncate max-w-[180px]">${item.visaCategory || 'Visa'}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                        <span class="text-xs text-slate-500 truncate"><i class="fa-solid fa-phone mr-1"></i>${item.primaryPhone || ''}</span>
+                        <button type="button" class="inspect-btn inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg transition">
+                            <i class="fa-solid fa-eye"></i> View Full Dossier & PDF
+                        </button>
+                    </div>
+                `;
+                card.querySelector('.inspect-btn').addEventListener('click', () => openDetailModal(item));
+                container.appendChild(card);
+            });
+        }
+
+        function openDetailModal(item) {
+            activeModalRecord = item;
+            document.getElementById('modalEmployeeName').textContent = `${item.givenNames || ''} ${item.surname || ''}`;
+            document.getElementById('modalRefId').textContent = `${item.referenceId} • Submitted: ${item.submittedAtStr || item.signatureDate}`;
+
+            const prevJobs = item.previousJobs ? JSON.parse(item.previousJobs) : [];
+            const children = item.childrenList ? JSON.parse(item.childrenList) : [];
+
+            const body = document.getElementById('modalBodyContent');
+            body.innerHTML = `
+                <!-- Top Biometric Selfie & Passport Header -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <div class="text-center">
+                        <span class="block text-xs font-bold text-slate-600 mb-2">Biometric Selfie</span>
+                        <img src="${item.selfieDataUrl}" class="w-36 h-36 object-cover rounded-xl mx-auto border border-slate-300 shadow-xs">
+                    </div>
+                    <div class="sm:col-span-2 flex flex-col justify-between">
+                        <div>
+                            <span class="block text-xs font-bold text-slate-600 mb-1">Passport Bio-Page Attachment</span>
+                            ${item.passportDataUrl && item.passportDataUrl.startsWith('data:image')
+                                ? `<img src="${item.passportDataUrl}" class="max-h-36 rounded-lg border border-slate-300">`
+                                : `<p class="text-xs text-slate-500 italic bg-white p-3 rounded-lg border border-slate-200">${item.passportFileName || 'No image preview attached'}</p>`
+                            }
+                        </div>
+                        <div class="mt-3 text-xs text-slate-600">
+                            <strong>Passport No:</strong> ${item.passportNumber} (${item.passportCountry}) &bull; <strong>Valid:</strong> ${item.passportIssueDate} to ${item.passportExpiryDate}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Structured IRCC Sections -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <div class="p-4 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-900 uppercase tracking-wider mb-2 border-b pb-1">1. Personal Information</h4>
+                        <p><strong>Full Name:</strong> ${item.surname}, ${item.givenNames}</p>
+                        <p><strong>Other Names:</strong> ${item.hasOtherName} ${item.otherNameDetails ? `(${item.otherNameDetails})` : ''}</p>
+                        <p><strong>Gender / DOB:</strong> ${item.gender} &bull; ${item.dob}</p>
+                        <p><strong>Birthplace:</strong> ${item.birthCity}, ${item.birthCountry}</p>
+                        <p><strong>Citizenship:</strong> ${item.citizenship} (${item.residenceStatus})</p>
+                        <p><strong>Marital Status:</strong> ${item.maritalStatus} ${item.spouseName ? `(Spouse: ${item.spouseName}, DOB: ${item.spouseDob})` : ''}</p>
+                        <p><strong>National ID:</strong> ${item.nationalId || 'N/A'}</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-900 uppercase tracking-wider mb-2 border-b pb-1">2. Contact & Canada Travel</h4>
+                        <p><strong>Email / Mobile:</strong> ${item.email} &bull; ${item.primaryPhone}</p>
+                        <p><strong>Address:</strong> ${item.resStreet}, ${item.resCity}, ${item.resState} ${item.resPostal}, ${item.resCountry}</p>
+                        <p><strong>Visa Category:</strong> ${item.visaCategory}</p>
+                        <p><strong>Travel Dates:</strong> ${item.arrivalDate} to ${item.departureDate} (${item.stayDuration})</p>
+                        <p><strong>Funds & Funder:</strong> ${item.fundsAvailable} (${item.tripFunder})</p>
+                        <p><strong>Canadian Host:</strong> ${item.hostDetails}</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-900 uppercase tracking-wider mb-2 border-b pb-1">3. Education & Employment</h4>
+                        <p><strong>Highest Education:</strong> ${item.eduDegree} in ${item.eduField} (${item.eduInstitution}, ${item.eduLocation}, ${item.eduYear})</p>
+                        <p><strong>Current Employer:</strong> ${item.currEmployer} &bull; ${item.currTitle}</p>
+                        <p><strong>Joined / Location:</strong> ${item.currJoinDate} &bull; ${item.currWorkAddress}</p>
+                        ${prevJobs.length ? `<p class="mt-1"><strong>Previous Roles:</strong> ${prevJobs.map(j => `${j.role} at ${j.company} (${j.dates})`).join('; ')}</p>` : ''}
+                    </div>
+
+                    <div class="p-4 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-900 uppercase tracking-wider mb-2 border-b pb-1">4. Family & Security (IMM 5645)</h4>
+                        <p><strong>Father:</strong> ${item.fatherName} (DOB: ${item.fatherDob}, ${item.fatherBirthCountry}) - ${item.fatherAddressOcc}</p>
+                        <p><strong>Mother:</strong> ${item.motherName} (DOB: ${item.motherDob}, ${item.motherBirthCountry}) - ${item.motherAddressOcc}</p>
+                        ${children.length ? `<p><strong>Children:</strong> ${children.map(c => `${c.name} (${c.dob})`).join(', ')}</p>` : ''}
+                        <p class="mt-2"><strong>Security Disclosures:</strong> Refusal: ${item.sec_refusal} | Overstay: ${item.sec_overstay} | Criminal: ${item.sec_criminal} | Medical: ${item.sec_medical} | Military: ${item.sec_military}</p>
+                    </div>
+                </div>
+
+                <!-- Signature Block -->
+                <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <span class="block text-xs font-bold text-slate-700">Applicant Digital Signature</span>
+                        <p class="text-xs text-slate-500">Signed by <strong>${item.typedSignature}</strong> on ${item.signatureDate}</p>
+                    </div>
+                    ${item.signatureDataUrl ? `<img src="${item.signatureDataUrl}" class="h-16 bg-white border border-slate-200 rounded-lg px-3 py-1">` : ''}
+                </div>
+            `;
+
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        document.getElementById('closeModalBtn').addEventListener('click', () => {
+            document.getElementById('detailModal').classList.add('hidden');
+        });
+
+        document.getElementById('printSummaryBtn').addEventListener('click', () => {
+            window.print();
+        });
+
+        document.getElementById('downloadJsonBtn').addEventListener('click', () => {
+            if (!activeModalRecord) return;
+            const blob = new Blob([JSON.stringify(activeModalRecord, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${activeModalRecord.referenceId}_${activeModalRecord.surname || 'Employee'}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        // Export All Submissions as CSV
+        document.getElementById('exportAllCsvBtn').addEventListener('click', () => {
+            if (submissionsCache.length === 0) {
+                showToast("No submissions available to export.", "error");
+                return;
+            }
+            const headers = ["ReferenceID", "Surname", "GivenNames", "DOB", "PassportNumber", "PassportExpiry", "Email", "Phone", "VisaCategory", "ArrivalDate", "DepartureDate", "CurrentEmployer", "JobTitle", "SubmittedDate"];
+            const rows = submissionsCache.map(s => [
+                s.referenceId, s.surname, s.givenNames, s.dob, s.passportNumber, s.passportExpiryDate,
+                s.email, s.primaryPhone, s.visaCategory, s.arrivalDate, s.departureDate,
+                s.currEmployer, s.currTitle, s.signatureDate
+            ].map(val => `"${String(val || '').replace(/"/g, '""')}"`).join(','));
+
+            const csvContent = [headers.join(','), ...rows].join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Canada_Visa_Employee_Submissions_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast("CSV file downloaded!", "success");
+        });
+
+        // ==========================================
+        // 9. SHARE FORM LINK (CLIPBOARD HELPER)
+        // ==========================================
+        document.getElementById('shareLinkBtn').addEventListener('click', () => {
+            const urlToCopy = window.location.href;
+            const tempInput = document.createElement('input');
+            tempInput.value = urlToCopy;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand('copy');
+                showToast("Portal link copied to clipboard! Share this URL with your employee.", "success");
+            } catch (err) {
+                showToast("Copy this URL from your browser address bar to share with your employee.", "info");
+            }
+            document.body.removeChild(tempInput);
+        });
+
+        // Initialize App on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            goToStep(1);
+            initFirebase();
+        });
+    </script>
+</body>
+</html>
